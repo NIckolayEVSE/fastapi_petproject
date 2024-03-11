@@ -1,15 +1,17 @@
 from datetime import date
-from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI, Query
 
-from schemas import SBooking, SHotel, GetHotels
 from booking.router import router as router_booking
+from schemas import SHotel
+from users.router import router as router_users
 
 app = FastAPI(
     title="Trading App",
 )
+
+app.include_router(router_users)
 app.include_router(router_booking)
 
 

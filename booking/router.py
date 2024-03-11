@@ -1,9 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from sqlalchemy import select
 
 from booking.dao import BookingDAO
 from booking.models import Bookings
 from database import async_session_maker
+from schemas import SBooking
+from users.dependencies import get_current_user
+from users.models import Users
 
 router = APIRouter(
     prefix="/bookings",
@@ -12,9 +15,10 @@ router = APIRouter(
 
 
 @router.get("")
-async def get_booking():
-    # async with async_session_maker() as session:
-    #     query = select(Bookings)
-    #     result = await session.execute(query)
-    #     return result.mappings().all()
-    return await BookingDAO.find_one_or_none(room_id=1)
+async def get_booking(user: Users = Depends(get_current_user)) -> list[SBooking]:
+    return await BookingDAO.find_all(user_id=user.id)
+
+
+@router.post("/")
+async def add_booking(user: Users = Depends(get_current_user)):
+    await BookingDAO.add()
