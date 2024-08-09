@@ -3,7 +3,6 @@ from fastapi import APIRouter, Response, Depends
 from exceptions import UserAlreadyExistsException, IncorrectEmailORPasswordException
 from users.auth import (
     get_password_hash,
-    verify_password,
     authenticate_user,
     create_access_token,
 )
